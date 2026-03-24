@@ -49,7 +49,7 @@ export const apps: App[] = [
     lastUpdate: MSM_RELEASE_DATE,
     version: MSM_RELEASE_TAG,
     category: '系统工具',
-    tags: ['管理平台', '集成入口', 'Docker', 'CLI'],
+    tags: ['管理平台', 'DNS', '广告拦截', '网络优化', '分流'],
     downloads: [
       { architecture: 'x86', url: MSM_LINKS.amd64, size: '20.3 MB' },
       { architecture: 'arm64', url: MSM_LINKS.arm64, size: '18.6 MB' },
