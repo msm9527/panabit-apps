@@ -1,3 +1,5 @@
+import { MSM_LINKS, MSM_RELEASE_DATE, MSM_RELEASE_TAG } from './msm';
+
 export interface DownloadLink {
   architecture: 'arm64' | 'x86' | 'universal';
   url: string;
@@ -37,6 +39,25 @@ export function getAppDownloadPath(id: string, filename: string): string {
 }
 
 export const apps: App[] = [
+  {
+    id: 'panabit-msm',
+    name: 'MSM 管理中心',
+    description: 'MSM 是面向网络与系统场景的管理平台，这里提供文档、Beta 版本下载，以及直达 Web 管理界面的集成入口。',
+    icon: 'apps/panabit-msm/icon.svg',
+    author: 'msm9527',
+    publishDate: '2026-03-24',
+    lastUpdate: MSM_RELEASE_DATE,
+    version: MSM_RELEASE_TAG,
+    category: '系统工具',
+    tags: ['管理平台', '集成入口', 'Docker', 'CLI'],
+    downloads: [
+      { architecture: 'x86', url: MSM_LINKS.amd64, size: '20.3 MB' },
+      { architecture: 'arm64', url: MSM_LINKS.arm64, size: '18.6 MB' },
+    ],
+    updateHistory: [
+      { version: MSM_RELEASE_TAG, date: MSM_RELEASE_DATE, changes: ['美化重启服务全屏弹窗', '统一重启服务流程', '修正用户菜单问题'] },
+    ],
+  },
   {
     id: 'panabit-adguard-home',
     name: 'AdGuard Home',
