@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { App } from '../data/apps';
+import { AppInstallChannels } from './AppInstallChannels';
 
 interface AppCardProps {
   app: App;
@@ -126,33 +127,38 @@ export function AppCard({ app, index }: AppCardProps) {
           </div>
         </div>
 
-        {/* Download buttons */}
-        <div className="flex flex-wrap gap-2 mb-4">
-          {app.downloads.map((download) => (
-            <a
-              key={download.architecture}
-              href={download.url}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105"
-              style={{
-                background: 'rgba(26, 26, 37, 0.8)',
-                border: `1px solid ${architectureLabels[download.architecture].color}40`,
-                color: architectureLabels[download.architecture].color,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = `${architectureLabels[download.architecture].color}15`;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(26, 26, 37, 0.8)';
-              }}
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-              </svg>
-              <span>{architectureLabels[download.architecture].label}</span>
-              <span className="text-[var(--color-text-muted)]">({download.size})</span>
-            </a>
-          ))}
-        </div>
+        {app.installChannels ? (
+          <AppInstallChannels channels={app.installChannels} />
+        ) : null}
+
+        {app.downloads.length > 0 ? (
+          <div className="flex flex-wrap gap-2 mb-4">
+            {app.downloads.map((download) => (
+              <a
+                key={download.architecture}
+                href={download.url}
+                className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105"
+                style={{
+                  background: 'rgba(26, 26, 37, 0.8)',
+                  border: `1px solid ${architectureLabels[download.architecture].color}40`,
+                  color: architectureLabels[download.architecture].color,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = `${architectureLabels[download.architecture].color}15`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(26, 26, 37, 0.8)';
+                }}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                <span>{architectureLabels[download.architecture].label}</span>
+                <span className="text-[var(--color-text-muted)]">({download.size})</span>
+              </a>
+            ))}
+          </div>
+        ) : null}
 
         {/* Update history toggle */}
         <button

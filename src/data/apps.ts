@@ -1,4 +1,10 @@
-import { MSM_LINKS, MSM_RELEASE_DATE, MSM_RELEASE_TAG } from './msm';
+import {
+  MSM_BETA_RELEASE_DATE,
+  MSM_BETA_RELEASE_TAG,
+  MSM_LINKS,
+  MSM_STABLE_RELEASE_DATE,
+  MSM_STABLE_RELEASE_TAG,
+} from './msm';
 
 export interface DownloadLink {
   architecture: 'arm64' | 'x86' | 'universal';
@@ -10,6 +16,20 @@ export interface UpdateRecord {
   version: string;
   date: string;
   changes: string[];
+}
+
+export interface InstallLink {
+  label: string;
+  url: string;
+  size?: string;
+}
+
+export interface InstallChannel {
+  name: string;
+  version: string;
+  note: string;
+  tone?: 'stable' | 'beta';
+  links: InstallLink[];
 }
 
 export interface App {
@@ -25,6 +45,7 @@ export interface App {
   tags: string[];
   downloads: DownloadLink[];
   updateHistory: UpdateRecord[];
+  installChannels?: InstallChannel[];
 }
 
 // 获取应用图标路径（引用本仓库 public/apps/{id}/icon.png）
@@ -41,21 +62,57 @@ export function getAppDownloadPath(id: string, filename: string): string {
 export const apps: App[] = [
   {
     id: 'panabit-msm',
-    name: 'MSM 管理中心',
-    description: 'MSM 是面向网络与系统场景的管理平台，这里提供文档、Beta 版本下载，以及直达 Web 管理界面的集成入口。',
+    name: 'MSM 管理平台',
+    description: '通过可视化管理平台统一管理 DNS 服务器与代理服务，实现智能 DNS 分流。',
     icon: 'apps/panabit-msm/icon.svg',
     author: 'msm9527',
-    publishDate: '2026-03-24',
-    lastUpdate: MSM_RELEASE_DATE,
-    version: MSM_RELEASE_TAG,
+    publishDate: MSM_STABLE_RELEASE_DATE,
+    lastUpdate: MSM_BETA_RELEASE_DATE,
+    version: `${MSM_STABLE_RELEASE_TAG} / ${MSM_BETA_RELEASE_TAG}`,
     category: '系统工具',
     tags: ['管理平台', 'DNS', '广告拦截', '网络优化', '分流'],
-    downloads: [
-      { architecture: 'x86', url: MSM_LINKS.amd64, size: '20.3 MB' },
-      { architecture: 'arm64', url: MSM_LINKS.arm64, size: '18.6 MB' },
+    downloads: [],
+    installChannels: [
+      {
+        name: '正式版',
+        version: MSM_STABLE_RELEASE_TAG,
+        note: '当前正式版还没有 Panabit APX 安装包，可先前往稳定版最新发布页查看安装方式。',
+        tone: 'stable',
+        links: [
+          { label: '查看正式版', url: MSM_LINKS.stableLatest },
+        ],
+      },
+      {
+        name: '测试版',
+        version: MSM_BETA_RELEASE_TAG,
+        note: '测试版当前已提供 Panabit APX 安装包，可直接在派网环境安装。',
+        tone: 'beta',
+        links: [
+          { label: 'x86 APX', url: MSM_LINKS.betaAmd64Apx, size: '20.4 MB' },
+          { label: 'ARM64 APX', url: MSM_LINKS.betaArm64Apx, size: '18.6 MB' },
+          { label: '测试版发布页', url: MSM_LINKS.betaRelease },
+        ],
+      },
     ],
     updateHistory: [
-      { version: MSM_RELEASE_TAG, date: MSM_RELEASE_DATE, changes: ['美化重启服务全屏弹窗', '统一重启服务流程', '修正用户菜单问题'] },
+      {
+        version: MSM_BETA_RELEASE_TAG,
+        date: MSM_BETA_RELEASE_DATE,
+        changes: [
+          '为 mihomo 增加中转优先下载',
+          '补全 mosdns 代理策略覆盖并调整下载优先级逻辑',
+          '优化 setup 安装下载可靠性，修复 tar.gz 安装处理',
+        ],
+      },
+      {
+        version: MSM_STABLE_RELEASE_TAG,
+        date: MSM_STABLE_RELEASE_DATE,
+        changes: [
+          '设置页改版，渠道迁移至版本信息并按渠道分组',
+          '代理管理页适配移动端并优化卡片布局',
+          '修复广告拦截规则状态同步和 Mosdns 更新逻辑误判',
+        ],
+      },
     ],
   },
   {
